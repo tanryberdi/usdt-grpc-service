@@ -14,6 +14,7 @@ type RateService struct {
 	DB *sql.DB
 }
 
+// GetRates Implement the method from the proto definition to get the rates
 func (s *RateService) GetRates(
 	ctx context.Context,
 	req *proto.GetRatesRequest,

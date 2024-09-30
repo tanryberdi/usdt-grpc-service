@@ -33,6 +33,7 @@ type Rate struct {
 	Timestamp time.Time
 }
 
+// FetchUSDTRate fetches the USDT to RUB rate from Garantex
 func FetchUSDTRate() (Rate, error) {
 	url := "https://garantex.org/api/v2/depth?market=usdtrub"
 	resp, err := http.Get(url)
