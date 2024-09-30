@@ -2,32 +2,36 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"usdt-grpc-service/internal"
 	"usdt-grpc-service/internal/db"
 	"usdt-grpc-service/internal/handler"
 	"usdt-grpc-service/proto"
 
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 func main() {
+	internal.InitLogger()
+	defer internal.Logger.Sync()
+
 	host := os.Getenv("DB_HOST")
 	connStr := "postgres://tanryberdi:tanryberdi@" + host + ":5432/testdb?sslmode=disable"
 	dbConn, err := db.ConnectToDB(connStr)
 	if err != nil {
-		log.Fatal(err)
+		internal.Logger.Fatal("failed to connect to the database", zap.Error(err))
 	}
 	defer dbConn.Close()
 
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		internal.Logger.Fatal("failed to listen", zap.Error(err))
 	}
 
 	// Create a new gRPC server
@@ -38,13 +42,13 @@ func main() {
 	// Register reflection service on gRPC server.
 	reflection.Register(grpcServer)
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		internal.Logger.Fatal("failed to serve", zap.Error(err))
 	}
 
 	// Gracefully shutdown the server
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {
-			log.Fatalf("failed to serve: %v", err)
+			internal.Logger.Fatal("failed to serve", zap.Error(err))
 		}
 	}()
 

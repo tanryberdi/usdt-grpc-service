@@ -6,6 +6,10 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"usdt-grpc-service/internal"
+
+	"go.uber.org/zap"
 )
 
 type GarantexResponse struct {
@@ -38,6 +42,7 @@ func FetchUSDTRate() (Rate, error) {
 	url := "https://garantex.org/api/v2/depth?market=usdtrub"
 	resp, err := http.Get(url)
 	if err != nil {
+		internal.Logger.Error("failed to fetch USDT rate", zap.Error(err))
 		return Rate{}, err
 	}
 	defer resp.Body.Close()
@@ -45,12 +50,14 @@ func FetchUSDTRate() (Rate, error) {
 	// unmarshall the response
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+		internal.Logger.Error("failed to read response body", zap.Error(err))
 		return Rate{}, err
 	}
 
 	var data GarantexResponse
 	err = json.Unmarshal(body, &data)
 	if err != nil {
+		internal.Logger.Error("failed to unmarshal response", zap.Error(err))
 		return Rate{}, err
 	}
 
