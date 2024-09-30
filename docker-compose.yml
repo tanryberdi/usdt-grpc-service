@@ -1,21 +1,35 @@
 services:
   db:
-    image: postgres:13-alpine
+    image: postgres:latest
     environment:
       POSTGRES_DB: testdb
       POSTGRES_USER: tanryberdi
       POSTGRES_PASSWORD: tanryberdi
     ports:
         - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
 
-  app:
+  migrate:
+    image: migrate/migrate
+    depends_on:
+      - db
+    volumes:
+      - ./migrations:/migrations
+    command: -path=migrations/ -database=postgres://tanryberdi:tanryberdi@db:5432/testdb?sslmode=disable up
+    links:
+      - db
+
+  usdt-grpc-service:
     build: .
     ports:
       - "50051:50051"
     depends_on:
       - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=tanryberdi
+      - DB_PASSWORD=tanryberdi
+      - DB_NAME=testdb
 
 volumes:
     postgres_data:

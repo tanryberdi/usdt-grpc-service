@@ -7,6 +7,6 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o app ./cmd/app
+RUN go build -o usdt-grpc-service ./cmd/app
 
-CMD ["./app"]
+CMD ["./usdt-grpc-service"]
