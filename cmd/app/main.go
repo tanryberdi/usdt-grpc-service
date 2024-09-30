@@ -13,6 +13,7 @@ import (
 	"usdt-grpc-service/proto"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -33,6 +34,12 @@ func main() {
 	rateService := &handler.RateService{DB: dbConn}
 	proto.RegisterRateServiceServer(grpcServer, rateService)
 
+	// Register reflection service on gRPC server.
+	reflection.Register(grpcServer)
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
+
 	// Gracefully shutdown the server
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {
@@ -40,7 +47,7 @@ func main() {
 		}
 	}()
 
-	// Capture signals to shutdown the server
+	// Capture signals got shut down the server
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 	<-c
