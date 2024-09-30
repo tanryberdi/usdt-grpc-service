@@ -3,6 +3,8 @@ package db
 import (
 	"database/sql"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 func ConnectToDB(connStr string) (*sql.DB, error) {
