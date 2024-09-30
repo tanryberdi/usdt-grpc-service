@@ -6,9 +6,11 @@ import (
 
 	"usdt-grpc-service/internal/db"
 	"usdt-grpc-service/internal/service"
+	"usdt-grpc-service/proto"
 )
 
 type RateService struct {
+	proto.UnimplementedRateServiceServer
 	DB *sql.DB
 }
 
