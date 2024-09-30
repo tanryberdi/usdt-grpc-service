@@ -1,12 +1,11 @@
 build:
-	go build -o app ./cmd/app
-
+	go build -o usdt-grpc-service ./cmd/app
 
 docker-build:
 	docker build -t usdt-grpc-service .
 
 run:
-	./app
+	./usdt-grpc-service
 
 test:
 	go test -v ./...
