@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS rates (
+  id SERIAL PRIMARY KEY,
+    ask NUMERIC,
+    BID NUMERIC,
+    timestamp TIMESTAMPTZ
+);
