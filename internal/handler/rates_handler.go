@@ -11,7 +11,8 @@ import (
 
 type RateService struct {
 	proto.UnimplementedRateServiceServer
-	DB *sql.DB
+	DB            *sql.DB
+	FetchUSDTRate func(string) (service.Rate, error)
 }
 
 // GetRates Implement the method from the proto definition to get the rates
@@ -20,7 +21,7 @@ func (s *RateService) GetRates(
 	req *proto.GetRatesRequest,
 ) (*proto.GetRatesResponse, error) {
 	url := "https://garantex.org/api/v2/depth?market=usdtrub"
-	rate, err := service.FetchUSDTRate(url)
+	rate, err := s.FetchUSDTRate(url)
 	if err != nil {
 		return nil, err
 	}
