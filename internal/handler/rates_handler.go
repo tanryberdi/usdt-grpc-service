@@ -19,7 +19,8 @@ func (s *RateService) GetRates(
 	ctx context.Context,
 	req *proto.GetRatesRequest,
 ) (*proto.GetRatesResponse, error) {
-	rate, err := service.FetchUSDTRate()
+	url := "https://garantex.org/api/v2/depth?market=usdtrub"
+	rate, err := service.FetchUSDTRate(url)
 	if err != nil {
 		return nil, err
 	}

@@ -38,8 +38,8 @@ type Rate struct {
 }
 
 // FetchUSDTRate fetches the USDT to RUB rate from Garantex
-func FetchUSDTRate() (Rate, error) {
-	url := "https://garantex.org/api/v2/depth?market=usdtrub"
+func FetchUSDTRate(url string) (Rate, error) {
+	//url := "https://garantex.org/api/v2/depth?market=usdtrub"
 	resp, err := http.Get(url)
 	if err != nil {
 		internal.Logger.Error("failed to fetch USDT rate", zap.Error(err))
