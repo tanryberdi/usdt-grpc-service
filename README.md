@@ -84,3 +84,6 @@
 - `internal/handler`: gRPC service handlers.
 - `proto`: Protocol Buffers definitions.
 - `internal/logger.go`: Logger initialization (zap).
+
+## тестовое задание
+- https://gist.github.com/nanaban/27e482f75357e53c2014beab6cea498b
